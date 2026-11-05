@@ -1,0 +1,24 @@
+group,repo,branch,topic,homework,lecture,shape,in_8_topic_run
+positive,nlp_course,2025,w01 embeddings,week01_embeddings/homework.ipynb,Lena Voita NLP Course For You (HTML),paper-like,yes
+positive,nlp_course,2025,w02 language models,week02_lm/homework_pytorch.ipynb,week02_lm/lecture_lm.pdf + Voita (HTML),paper-like,no
+positive,nlp_course,2025,w03 seq2seq + attention,week03_attention/new_practice_and_homework.ipynb,seq2seq_and_attention.pptx.pdf + Voita (HTML),paper-like,no
+positive,nlp_course,2025,w04 transfer learning / BERT,week04_transfer/homework.ipynb,week04_transfer/lecture_transfer.pdf,applied,yes
+positive,nlp_course,2025,w06 prompting / ICL,week06_prompting/homework.ipynb,lecture_prompting.pdf,applied,yes
+positive,nlp_course,2025,w07 PEFT / LoRA,week07_finetuning/homework.ipynb,week07_finetuning/lecture.pdf,system,yes
+positive,nlp_course,2025,w08 efficiency / quantisation,week08_efficiency/hw_8.ipynb,lecture_efficiency.pdf,paper-like,yes
+positive,nlp_course,2025,w10 agents,week10_agents/homework/week10_hw.ipynb,week10_agents/slides.pdf,system,no
+positive,nlp_course,2025,w11 interpretability,week11_interpretability/homework_interpretability.ipynb,lecture_interpretability.pdf,paper-like,yes
+positive,recsys_course,2026_spring,w04 two-tower candidate generation,week04_dl_candgen/homework/homework.ipynb,week04_dl_candgen/lecture.pdf,paper-like,yes
+positive,recsys_course,2026_spring,w07 neural ranking (DCN-v2),week07_dl_ranking/homework/homework.ipynb,week07_dl_ranking/lecture.pdf,paper-like,yes
+positive,recsys_course,2026_spring,w10 transformers for recsys,week10_transformers/homework/homework.ipynb,week10_transformers/lecture.pdf,paper-like,no
+positive,speech_course,main,w03 speaker biometrics (ECAPA),week_03_kws_bio/homework.ipynb,Google Slides + video,paper-like,no
+positive,speech_course,main,w04 ASR (CTC / RNN-T),week_04_asr/homework.ipynb,Google Slides + video,paper-like,no
+positive,speech_course,main,w08 TTS (FastPitch),week_08_tts_am_vocoders/notebooks/homework.ipynb,Google Slides + video,system,no
+positive,speech_course,main,w09 neural codecs / RVQ,week_09_codecs/homework/homework.ipynb,Google Slides + video,paper-like,no
+partial,Practical_DL,fall25,w02 autodiff; w07 LM; w08 transformer; w10 VAE; …,week README + homework,YouTube lectures only (transcription needed),mixed,no
+partial,Practical_RL,master,w03 Q-learning; w04 DQN; w06 REINFORCE; w09 PPO/SAC,week README + homework,slides on Yandex Disk + week README,mixed,no
+negative,deep_vision_and_graphics,fall25,CNN,—,none (slides behind the LMS),control,no
+negative,deep_vision_and_graphics,fall25,vision transformers,—,none (slides behind the LMS),control,no
+negative,deep_vision_and_graphics,fall25,segmentation,—,none (slides behind the LMS),control,no
+negative,deep_vision_and_graphics,fall25,diffusion,—,none (slides behind the LMS),control,no
+negative,deep_vision_and_graphics,fall25,NeRF,—,none (slides behind the LMS),control,no

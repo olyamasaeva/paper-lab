@@ -1,0 +1,39 @@
+{
+ "title": "Inverted dropout (minimal spec example)",
+ "outfile": "labs/dropout_min.ipynb",
+ "cells": [
+  {
+   "type": "md",
+   "src": "# Inverted dropout\n\n**Paper:** Srivastava et al., *Dropout: A Simple Way to Prevent Neural Networks from Overfitting*, JMLR 2014.\n\n**What we build:** the dropout layer itself, then the train/eval contrast that makes it a regulariser.\n\n**Parts:** (1) the mask and the rescaling → (2) train vs eval behaviour."
+  },
+  {
+   "type": "md",
+   "src": "## Experiments first\n\n> **(a) What did the results actually show, compared with the abstract?**\n> …\n\n> **(b) The weakest experiment, and how would you falsify it?**\n> …\n\n> **(c) What was not tested?**\n> …"
+  },
+  {
+   "type": "code",
+   "src": "import torch\ntorch.manual_seed(0)",
+   "tag": "setup"
+  },
+  {
+   "type": "md",
+   "src": "## Part 1. The mask\n\nDuring training each unit is kept with probability $1-p$. Scaling the kept units by $\\frac{1}{1-p}$ keeps $\\mathbb{E}[\\tilde h] = h$, so nothing has to change at test time."
+  },
+  {
+   "type": "solution",
+   "src": "def dropout(h, p, train=True):\n    \"\"\"Inverted dropout.\n\n    Args:\n        h: [B, d] float, activations.\n        p: float in [0, 1), probability of dropping a unit.\n        train: bool, training or evaluation mode.\n    Returns:\n        [B, d] float with the same expectation as h; identity in eval mode.\n    \"\"\"\n    # YOUR CODE\n    raise NotImplementedError",
+   "id": "p1",
+   "points": 2
+  },
+  {
+   "type": "test",
+   "src": "h = torch.ones(20000, 50)\nout = dropout(h, 0.3)\nassert abs(out.mean().item() - 1.0) < 0.01, 'mean drifted: did you rescale by 1/(1-p)?'\nassert abs((out == 0).float().mean().item() - 0.3) < 0.01, 'share of zeros should be p'\nassert torch.equal(dropout(h, 0.3, train=False), h), 'eval mode must be the identity'\nprint('ok')",
+   "id": "p1",
+   "points": 2
+  },
+  {
+   "type": "md",
+   "src": "❓ **Inline Question.** Why does the original paper multiply the weights by $1-p$ at test time, and what does the inverted form buy you in deployment?"
+  }
+ ]
+}
