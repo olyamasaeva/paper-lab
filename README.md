@@ -104,8 +104,8 @@ and the plan for a rerun on all 16 topics with negative controls are in the eval
 git clone https://github.com/olyamasaeva/paper-lab ~/.claude/skills/paper-lab
 ```
 
-Then ask Claude Code: "make a notebook for <paper>", "paper lab <pdf>", "reproduce
-<arXiv url> as an assignment". Other agents that read `SKILL.md` work too.
+Then ask Claude Code: `make a notebook for <paper>`, `paper lab <pdf>`, `reproduce
+<arXiv url> as an assignment`. Other agents that read `SKILL.md` work too.
 
 Requirements: Python 3.10+, `pdftotext` (poppler-utils) for PDFs, optionally
 [`defuddle`](https://github.com/kepano/defuddle) for web pages. The scripts are
