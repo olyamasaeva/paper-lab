@@ -24,18 +24,24 @@ Cell types:
 nbgrader metadata is set automatically, so the notebook works both as a plain
 notebook (just run the assert cells) and under `nbgrader autograde`.
 """
-import argparse, json, sys
+import argparse, json, os, re, sys
 
 
 def cell_id(i):
     return f"c{i:04d}"
 
 
+_CODE = re.compile(r"(```.*?```|~~~.*?~~~|`[^`\n]*`)", re.S)
+
+
 def _md_norm(s):
-    # Jupyter renders $...$ / $$...$$, not \(...\) / \[...\]: normalise the delimiters
-    s = s.replace("\\(", "$").replace("\\)", "$")
-    s = s.replace("\\[", "$$").replace("\\]", "$$")
-    return s
+    # Jupyter renders $...$ / $$...$$, not \(...\) / \[...\]: normalise the delimiters,
+    # but only in prose: fenced blocks and inline code are left exactly as written
+    parts = _CODE.split(s)
+    for i in range(0, len(parts), 2):
+        p = parts[i].replace("\\(", "$").replace("\\)", "$")
+        parts[i] = p.replace("\\[", "$$").replace("\\]", "$$")
+    return "".join(parts)
 
 
 def md_cell(i, src):
@@ -65,8 +71,15 @@ def code_cell(i, src, meta=None):
     }
 
 
-def build(spec, out_override=None):
+def _claim(seen, gid):
+    if gid in seen:
+        raise SystemExit(f"duplicate nbgrader grade_id {gid!r}: give each exercise a unique id")
+    seen.add(gid)
+
+
+def build(spec, out_override=None, force=False):
     cells = []
+    grade_ids = set()
     for i, c in enumerate(spec.get("cells", []), start=1):
         t = c.get("type", "md")
         src = c.get("src", "")
@@ -80,12 +93,14 @@ def build(spec, out_override=None):
         elif t == "solution":
             gid = c.get("id", f"sol{i}")
             pts = c.get("points", 1)
+            _claim(grade_ids, gid)
             meta = {"nbgrader": _nbgrader(False, True, False, gid, pts),
                     "tags": ["exercise"]}
             cells.append(code_cell(i, src, meta))
         elif t == "test":
             gid = c.get("id", f"sol{i}") + "_test"
             pts = c.get("points", 1)
+            _claim(grade_ids, gid)
             meta = {"nbgrader": _nbgrader(True, False, True, gid, pts),
                     "tags": ["test"]}
             cells.append(code_cell(i, src, meta))
@@ -108,6 +123,11 @@ def build(spec, out_override=None):
     out = out_override or spec.get("outfile")
     if not out:
         raise SystemExit("no outfile given (spec.outfile or --out)")
+    if os.path.lexists(out) and not force:
+        raise SystemExit(f"{out} exists; pass --force to overwrite it")
+    if os.path.islink(out):
+        raise SystemExit(f"{out} is a symlink; refusing to write through it")
+    os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:
         json.dump(nb, f, ensure_ascii=False, indent=1)
     n_ex = sum(1 for c in spec.get("cells", []) if c.get("type") == "solution")
@@ -118,10 +138,11 @@ def build(spec, out_override=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--spec", help="path to the JSON spec (stdin if omitted)")
-    ap.add_argument("--out", help="override outfile")
+    ap.add_argument("--out", help="override outfile (takes precedence over the spec)")
+    ap.add_argument("--force", action="store_true", help="overwrite an existing notebook")
     a = ap.parse_args()
     raw = open(a.spec, encoding="utf-8").read() if a.spec else sys.stdin.read()
-    build(json.loads(raw), a.out)
+    build(json.loads(raw), a.out, a.force)
 
 
 if __name__ == "__main__":
